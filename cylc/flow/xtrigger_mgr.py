@@ -259,6 +259,9 @@ class XtriggerManager:
 
         """
         fname: str = fctx.func_name
+        if fname == 'suite_state':
+            LOG.warning('Xtrigger suite_state deprecated.'
+                        'Use Xtrigger workflow_state.')
         try:
             func = get_func(fname, fdir)
         except ImportError:

@@ -17,4 +17,8 @@
 # The suite_state xtrigger was renamed to workflow_state,
 # this breaks Cylc 7-8 interoperability.
 # This suite_state xtrigger replicates workflow_state - ensuring back-support
-from cylc.flow.xtriggers.workflow_state import workflow_state as suite_state
+#
+# Ignoring flake8 'imported but unused' complaint here
+# as we are only importing workflow_state to export with a different name
+from cylc.flow.xtriggers.workflow_state import (  # noqa: F401
+    workflow_state as suite_state)
