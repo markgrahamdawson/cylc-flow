@@ -20,5 +20,16 @@
 #
 # Ignoring flake8 'imported but unused' complaint here
 # as we are only importing workflow_state to export with a different name
-from cylc.flow.xtriggers.workflow_state import (  # noqa: F401
-    workflow_state as suite_state)
+from cylc.flow.xtriggers.workflow_state import workflow_state
+
+def suite_state(suite, task, point, offset=None, status='succeeded',
+                message=None, cylc_run_dir=None, debug=False):
+    return workflow_state(
+        workflow=suite,
+        task=task,
+        point=point,
+        offset=offset,
+        status=status,
+        message=message,
+        cylc_run_dir=cylc_run_dir
+    )
