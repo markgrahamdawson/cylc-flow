@@ -21,6 +21,7 @@ from unittest.mock import Mock
 
 from cylc.flow.workflow_files import WorkflowFiles
 from cylc.flow.xtriggers.workflow_state import workflow_state
+from cylc.flow.xtriggers.suite_state import suite_state
 from ..conftest import MonkeyMock
 
 
@@ -80,7 +81,14 @@ def test_back_compat(tmp_run_dir):
     finally:
         conn.close()
 
+    # Test workflow_state function
     satisfied, _ = workflow_state(id_, task='mithril', point='2012')
     assert satisfied
     satisfied, _ = workflow_state(id_, task='arkenstone', point='2012')
+    assert not satisfied
+
+    # Test back-compat (old suite_state function)
+    satisfied, _ = suite_state(id_, task='mithril', point='2012')
+    assert satisfied
+    satisfied, _ = suite_state(id_, task='arkenstone', point='2012')
     assert not satisfied
