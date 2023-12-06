@@ -22,6 +22,7 @@
 # as we are only importing workflow_state to export with a different name
 from cylc.flow.xtriggers.workflow_state import workflow_state
 
+
 def suite_state(suite, task, point, offset=None, status='succeeded',
                 message=None, cylc_run_dir=None, debug=False):
     return workflow_state(
