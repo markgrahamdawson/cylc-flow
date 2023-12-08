@@ -14,17 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# The suite_state xtrigger was renamed to workflow_state,
-# this breaks Cylc 7-8 interoperability.
-# This suite_state xtrigger replicates workflow_state - ensuring back-support
-#
-# Ignoring flake8 'imported but unused' complaint here
-# as we are only importing workflow_state to export with a different name
+from cylc.flow import LOG
+import cylc.flow.flags
 from cylc.flow.xtriggers.workflow_state import workflow_state
+
+if not cylc.flow.flags.cylc7_back_compat:
+    LOG.warning(
+        "The suite_state xtrigger is deprecated. "
+        "Please use the workflow_state xtrigger instead."
+    )
 
 
 def suite_state(suite, task, point, offset=None, status='succeeded',
                 message=None, cylc_run_dir=None, debug=False):
+    '''The suite_state xtrigger was renamed to workflow_state,
+    this breaks Cylc 7-8 interoperability.
+    This suite_state xtrigger replicates
+    workflow_state - ensuring back-support'''
     return workflow_state(
         workflow=suite,
         task=task,
