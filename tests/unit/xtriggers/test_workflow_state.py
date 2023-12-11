@@ -21,9 +21,12 @@ from unittest.mock import Mock
 
 from cylc.flow.workflow_files import WorkflowFiles
 from cylc.flow.xtriggers.workflow_state import workflow_state
-from cylc.flow.xtriggers.suite_state import suite_state
 from ..conftest import MonkeyMock
 
+import pytest
+
+import importlib
+import cylc
 
 def test_inferred_run(tmp_run_dir: Callable, monkeymock: MonkeyMock):
     """Test that the workflow_state xtrigger infers the run number"""
@@ -43,7 +46,7 @@ def test_inferred_run(tmp_run_dir: Callable, monkeymock: MonkeyMock):
     assert results['workflow'] == expected_workflow_id
 
 
-def test_back_compat(tmp_run_dir):
+def test_back_compat(tmp_run_dir, caplog, monkeypatch: pytest.MonkeyPatch):
     """Test workflow_state xtrigger backwards compatibility with Cylc 7
     database."""
     id_ = 'celebrimbor'
@@ -86,6 +89,19 @@ def test_back_compat(tmp_run_dir):
     assert satisfied
     satisfied, _ = workflow_state(id_, task='arkenstone', point='2012')
     assert not satisfied
+
+    # Test warning is shown:
+    from cylc.flow.xtriggers.suite_state import suite_state
+    assert (
+        'The suite_state xtrigger is deprecated.'
+        ' Please use the workflow_state xtrigger instead.' in
+        caplog.messages
+    )
+    caplog.clear()
+
+    monkeypatch.setattr('cylc.flow.flags.cylc7_back_compat', True)
+    importlib.reload(cylc.flow.xtriggers.suite_state)
+    assert caplog.messages == []
 
     # Test back-compat (old suite_state function)
     satisfied, _ = suite_state(id_, task='mithril', point='2012')
