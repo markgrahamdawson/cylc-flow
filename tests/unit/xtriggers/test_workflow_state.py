@@ -108,3 +108,4 @@ def test_back_compat(tmp_run_dir, caplog, monkeypatch: pytest.MonkeyPatch):
     assert satisfied
     satisfied, _ = suite_state(id_, task='arkenstone', point='2012')
     assert not satisfied
+    
