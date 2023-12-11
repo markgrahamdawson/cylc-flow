@@ -104,8 +104,7 @@ def test_back_compat(tmp_run_dir, caplog, monkeypatch: pytest.MonkeyPatch):
     assert caplog.messages == []
 
     # Test back-compat (old suite_state function)
-    satisfied, _ = suite_state(id_, task='mithril', point='2012')
+    satisfied, _ = suite_state(suite=id_, task='mithril', point='2012')
     assert satisfied
-    satisfied, _ = suite_state(id_, task='arkenstone', point='2012')
+    satisfied, _ = suite_state(suite=id_, task='arkenstone', point='2012')
     assert not satisfied
-    
